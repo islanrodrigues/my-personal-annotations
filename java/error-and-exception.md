@@ -26,3 +26,36 @@ Exception
     ├─ SQLException
     └─ ...
 ```
+
+### Criando minha própria Exception
+É possível que exceções próprias sejam criadas no desenvolvimento Java. Para isso, basta criar uma classe que estenda a classe `Exception`.
+
+Exemplo:
+```java
+public class myException extends Exception {
+// hidden code
+
+    @Override
+    public String toString() {
+        return "Output from my exception's error description";
+    }
+}
+
+public static void main(String[] args) {
+    //hidden code
+
+    try {
+        //hidden code
+        throw new MyException();
+
+    } catch (MyException e) {
+        e.printStackTrace(); //output of the toString() method
+    }
+}
+
+public void test() throws MyException {
+    //hidden code
+    throw new MyException();
+}
+```
+

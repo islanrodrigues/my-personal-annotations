@@ -8,7 +8,7 @@ Essas informações podem ser consumidas de três maneiras diferentes:
 As anotações são precedidas de um `@`.
 Exemplo: `@Override`
 
-**Declarando uma _annotation_** -- para declarar uma anotação se uma o `@interface`. Dentro do corpo da anotação é possível declarar a assinatura dos métodos. Note que uma anotação é uma variação especial de uma interface. Para os métodos declarados também é possível definir um valor padrão através da palava chave `default`. 
+**Declarando uma _annotation_** -- para declarar uma anotação se usa o `@interface`. Dentro do corpo da anotação é possível declarar a assinatura dos métodos. Note que uma anotação é uma variação especial de uma interface. Para os métodos declarados também é possível definir um valor padrão através da palava chave `default`. 
 
 Exemplo:
 ```java
@@ -19,7 +19,7 @@ Exemplo:
 }
 ````
 
-**Fazendo uso da _annotation_** -- para o uso da anotação basta chamá-la acima do elemento ao qual você deseja anotar. Lembrando que ao definir atributos dentro da anotação, eles precisarão ser implementados no momento do uso, caso não possuam valor padrão.
+**Fazendo uso da _annotation_** -- para o uso da anotação basta chamá-la acima do elemento ao qual deseja anotar. Lembrando que ao definir atributos dentro da anotação, eles precisarão ser definidos no momento do uso, caso não possuam valor padrão.
 
 Exemplo:
 ```java
@@ -38,7 +38,7 @@ public class Test2 {
 
 **Definindo até quando a anotação está disponível** -- umas das principais configurações de uma _annotation_ é até quando ela estará disponível para ser recuperada. Dependendo de qual que seja o seu uso, mais de um tipo de retenção pode ser necessário.
 + **`SOURCE`** : tipo de retenção que significa dizer que uma anotação só ficará disponível apenas no código fonte. Ou seja, no momento em que a classe é compilada, a anotação não é transferida para o `.class`. É geralmente utilizado para fins de documentação e para uso de ferramentas que fazem processamento direto de código fonte;
-+ **`CLASS`** : tipo de retenção que significa dizer que uma anotação será mantida também nos arquivos `.class`, mas nõa serão carregadas pela JVM (_Java Virtual Machine_). Nesse caso elas ficam disponíveis até o carregamento da classe. É utilizada por ferramentas que fazem processamento do _bytecode_ da classe, podendo este ser feito de forma estática como uma etapa posterior a compilação ou no momento do carregamento das classes;
++ **`CLASS`** : tipo de retenção que significa dizer que uma anotação será mantida também nos arquivos `.class`, mas não serão carregadas pela JVM (_Java Virtual Machine_). Nesse caso elas ficam disponíveis até o carregamento da classe. É utilizada por ferramentas que fazem processamento do _bytecode_ da classe, podendo este ser feito de forma estática como uma etapa posterior a compilação ou no momento do carregamento das classes;
 + **`RUNTIME`** : tipo de retenção que significa dizer que uma anotação estará disponível para recuperação em tempo de execução. A JVM irá carregar a anotação em memória e torná-la accessível via `Reflection`. É utilizada geralmente por frameworks que precisam de acesso a anotação em tempo de execução.
 
 Para definir qual o tipo de retenção a anotação terá, é preciso anotá-la com uma outra anotação, chamada `@Retention`. Essa anotação recebe como parâmetro um `enum` do tipo `RetentionPolicy`. Esse `enum` irá possuir os três tipos de retenção descritos anteriormente.
@@ -82,5 +82,5 @@ public @interface Target {
 Em relação ao tipo `LOCAL_VARIABLE`, como as variáveis locais não são acessíveis por reflexão, esse tipo de anotação só faz sentido com retenção do tipo `SOURCE` ou `CLASS`. Em relação à anotação do tipo `PACKAGE`; utilizada para aplicar metainformações em uma pacote, para adicioná-la, é preciso criar um arquivo no pacote chamado `package-info.java` para definir a anotação.
 
 **Outras definições** -- além das anotações `@Retention` e `@Target`, outras podem vir a ser usadas, que são elas: 
-+ **`@Documented`** : quando houver a necessidade da anotação anotada ser incorporada junto à documentação dos elementados anotados;
++ **`@Documented`** : quando houver a necessidade da anotação anotada ser incorporada junto à documentação dos elementos anotados;
 + **`@Inherited`**: a anotação anotada será propagada para as subclasses que herdam da classe a qual possui essa anotação. Como é caso de herança de anotações, o uso dessa configuração só fará sentido para anotações do tipo `TYPE`. Um método sobrescrito por uma subclasse não irá herdar as anotações do tipo `@Inherited` do método que está sobrescrevendo.

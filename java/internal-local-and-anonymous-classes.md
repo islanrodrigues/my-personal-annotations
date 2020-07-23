@@ -53,7 +53,7 @@ public static void main(String[] args) {
 }
 ```
 
-**Classes anônimas** -- classes que têm o seu comportamento modificado no momento em que é instanciada. Ou seja, no momento em que a classe é instanciada (opós o new Class()) é definido um corpo com {} e dentro dele é sobrescrito algum comportamento em tempo de execução (_runtime_).
+**Classes anônimas** -- classes que têm o seu comportamento modificado no momento em que é instanciada. Ou seja, no momento em que a classe é instanciada (após o `new Class()`) é definido um corpo com `{}` e dentro dele é sobrescrito algum comportamento em tempo de execução (_runtime_).
 
 Exemplo:
 ```java
@@ -79,7 +79,7 @@ public static void main(String[] args) {
 
 Exemplo:
 ```java
-public Interface Text() {
+public interface Text() {
     void printText();
 }
 

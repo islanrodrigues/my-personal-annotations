@@ -8,7 +8,7 @@ Essas informações podem ser consumidas de três maneiras diferentes:
 As anotações são precedidas de um `@`.
 Exemplo: `@Override`
 
-**Declarando uma _annotation_** -- para declarar uma anotação se usa o `@interface`. Dentro do corpo da anotação é possível declarar a assinatura dos métodos. Note que uma anotação é uma variação especial de uma interface. Para os métodos declarados também é possível definir um valor padrão através da palava chave `default`. 
+**Declarando uma _annotation_** -- para declarar uma anotação se usa o `@interface`. Dentro do corpo da anotação é possível declarar a assinatura dos atributos. Note que uma anotação é uma variação especial de uma interface. Para os atributos declarados também é possível definir um valor padrão através da palava chave `default`. 
 
 Exemplo:
 ```java
@@ -18,8 +18,9 @@ Exemplo:
     String nationality() default "brazilian";
 }
 ````
+Diferentemente de um atributo de classe, apenas atributos do tipo primitivo,`enum`, `Class`, `String`, outras anotações e arrays de qualquer um dos tipos citados.
 
-**Fazendo uso da _annotation_** -- para o uso da anotação basta chamá-la acima do elemento ao qual deseja anotar. Lembrando que ao definir atributos dentro da anotação, eles precisarão ser definidos no momento do uso, caso não possuam valor padrão.
+**Fazendo uso da _annotation_** -- para o uso da anotação basta chamá-la acima do elemento ao qual deseja anotar. Lembrando que ao declarar atributos dentro da anotação, eles precisarão ser definidos no momento do uso, caso não possuam valor padrão.
 
 Exemplo:
 ```java
@@ -33,7 +34,31 @@ public class Test {
 public class Test2 {
 }
 ```
+Dentro da criação de uma anotação, existe um nome especial para atributo chamado `value`. Caso esse seja o único atributo declarado ou os outros atributos existentes já tenham um valor `default`, é possível fazer uso da anotação omitindo o nome do atributo e passando apenas a sua definição de valor.
 
+Exemplo:
+```java
+public @interface MyAnnotation1 {
+	int value(); 
+}
+
+public @interface MyAnnotation2 {
+	int value(); 
+	String description() default "Learning annotations in Java";
+}
+
+public @interface MyAnnotation3 {
+	int value(); 
+	String description();
+}
+
+
+@MyAnnotation1(13) //** VALID ** - the same as (value=13)
+@MyAnnotation2(14) // ** VALID ** - the same as (value=14)
+@MyAnnotation3(15) // ** INVALID ** - the correct would be (value=15, description="It's correct now");
+public class Test {
+}
+```
 É importante frisar que as anotações **NÃO FAZEM NADA** a não ser agregar novas informações sobre os elementos das classes. Para que elas tenham algum efeito sobre o funcionamento do programa, alguém precisa recuperar essas anotações e fazer alguma coisa a respeito, pois sozinhas as anotações não fazem nada.
 
 **Definindo até quando a anotação está disponível** -- umas das principais configurações de uma _annotation_ é até quando ela estará disponível para ser recuperada. Dependendo de qual que seja o seu uso, mais de um tipo de retenção pode ser necessário.
@@ -78,7 +103,6 @@ public @interface EJB {
 public @interface Target {
 }
 ```
-
 Em relação ao tipo `LOCAL_VARIABLE`, como as variáveis locais não são acessíveis por reflexão, esse tipo de anotação só faz sentido com retenção do tipo `SOURCE` ou `CLASS`. Em relação à anotação do tipo `PACKAGE`; utilizada para aplicar metainformações em uma pacote, para adicioná-la, é preciso criar um arquivo no pacote chamado `package-info.java` para definir a anotação.
 
 **Outras definições** -- além das anotações `@Retention` e `@Target`, outras podem vir a ser usadas, que são elas: 

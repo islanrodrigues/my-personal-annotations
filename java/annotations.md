@@ -5,10 +5,10 @@ Essas informações podem ser consumidas de três maneiras diferentes:
 + Em tempo de execução (_runtime_)
 + Em tempo de compilação ou deploy (compile or deploy-time)
 
-As anotações são precedidas de um `@`.
+As anotações são precedidas de um `@`.   
 Exemplo: `@Override`
 
-**Declarando uma _annotation_** -- para declarar uma anotação se usa o `@interface`. Dentro do corpo da anotação é possível declarar a assinatura dos atributos. Para a declaração de atributos é necessário abrir e fechar parênteses. Note que uma anotação é uma variação especial de uma interface. Para os atributos declarados também é possível definir um valor padrão através da palava chave `default`. 
+**Declarando uma _annotation_** -- para declarar uma anotação se usa o `@interface`. Dentro do corpo da anotação é possível declarar a assinatura dos atributos. Para a declaração de atributos é necessário abrir e fechar parênteses. Note que uma anotação é uma variação especial de uma interface. Para os atributos declarados também é possível definir um valor padrão através da palavra chave `default`. 
 
 Exemplo:
 ```java
@@ -18,7 +18,7 @@ Exemplo:
     String nationality() default "brazilian";
 }
 ```
-Diferentemente de um atributo de classe, apenas atributos do tipo primitivo,`enum`, `Class`, `String`, outras anotações e arrays de qualquer um dos tipos citados.
+Diferentemente de um atributo de classe, apenas atributos do tipo primitivo, `enum`, `Class`, `String`, outras anotações e arrays de qualquer um dos tipos citados são atributos válidos dentro da criação de uma anotação.
 
 **Fazendo uso da _annotation_** -- para o uso da anotação basta chamá-la acima do elemento ao qual deseja anotar. Lembrando que ao declarar atributos dentro da anotação, eles precisarão ser definidos no momento do uso, caso não possuam valor padrão.
 
@@ -138,12 +138,12 @@ public class MyClass {
 ```
 
 + `getAnnotations()` : irá retornar uma lista com todas as anotações de um determinado elemento.
-+ `getDelcaredAnnotations()` : irá retornar somente as anotações que foram diretamente declaradas no elemento, excluindo as que foram herdadas através do `@Inherited`. Como a questão de herançcas de anotações só se aplica a elementos do tipo `Class`, o retorno para os outros tipos de elementos será o mesmo para ambos os métodos.
++ `getDeclaredAnnotations()` : irá retornar somente as anotações que foram diretamente declaradas no elemento, excluindo as que foram herdadas através do `@Inherited`. Como a questão de herançcas de anotações só se aplica a elementos do tipo `Class`, o retorno para os outros tipos de elementos será o mesmo para ambos os métodos.
 
 **Recuperando anotações de parâmetros** -- estas anotações são recuperadas de forma diferente simplesmente pelo fato da `API Reflection` não possuir uma classe que represente um parâmetro. 
 + `getParameterAnnotations()` : esse método está presente nos elementos `Method` e `Constructor` e retorna um array bidimensional de `Annotation`. A primeira dimensão representa os parâmetros daquele elemento e a segunda dimensão representa as anotações contidas naquele parâmetro.
 
-As anotações em parâmetro se tornam úteis quando há a necessidade de identificar qual informação precisa ser passada ele.
+As anotações em parâmetro se tornam úteis quando há a necessidade de identificar qual informação precisa ser passada para ele.
 
 Exemplo:
 ```java
@@ -193,8 +193,8 @@ public class TestParameterAnnotation {
 	}
 
 	public void testMethod(@Param("number") Integer i, @Param("text") String s) {
-		System.out.println("Number parameter = " + i);
-		System.out.println("Text parameter = " + s);
+		System.out.println("Number parameter = " + i); // output -> Number parameter = 30
+		System.out.println("Text parameter = " + s); // output -> Text parameter = Hello, World
 	}
 }
 

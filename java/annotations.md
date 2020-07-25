@@ -8,7 +8,7 @@ Essas informações podem ser consumidas de três maneiras diferentes:
 As anotações são precedidas de um `@`.
 Exemplo: `@Override`
 
-**Declarando uma _annotation_** -- para declarar uma anotação se usa o `@interface`. Dentro do corpo da anotação é possível declarar a assinatura dos atributos. Note que uma anotação é uma variação especial de uma interface. Para os atributos declarados também é possível definir um valor padrão através da palava chave `default`. 
+**Declarando uma _annotation_** -- para declarar uma anotação se usa o `@interface`. Dentro do corpo da anotação é possível declarar a assinatura dos atributos. Para a declaração de atributos é necessário abrir e fechar parênteses. Note que uma anotação é uma variação especial de uma interface. Para os atributos declarados também é possível definir um valor padrão através da palava chave `default`. 
 
 Exemplo:
 ```java
@@ -17,7 +17,7 @@ Exemplo:
     int age();
     String nationality() default "brazilian";
 }
-````
+```
 Diferentemente de um atributo de classe, apenas atributos do tipo primitivo,`enum`, `Class`, `String`, outras anotações e arrays de qualquer um dos tipos citados.
 
 **Fazendo uso da _annotation_** -- para o uso da anotação basta chamá-la acima do elemento ao qual deseja anotar. Lembrando que ao declarar atributos dentro da anotação, eles precisarão ser definidos no momento do uso, caso não possuam valor padrão.
@@ -108,3 +108,94 @@ Em relação ao tipo `LOCAL_VARIABLE`, como as variáveis locais não são acess
 **Outras definições** -- além das anotações `@Retention` e `@Target`, outras podem vir a ser usadas, que são elas: 
 + **`@Documented`** : quando houver a necessidade da anotação anotada ser incorporada junto à documentação dos elementos anotados;
 + **`@Inherited`**: a anotação anotada será propagada para as subclasses que herdam da classe a qual possui essa anotação. Como é caso de herança de anotações, o uso dessa configuração só fará sentido para anotações do tipo `TYPE`. Um método sobrescrito por uma subclasse não irá herdar as anotações do tipo `@Inherited` do método que está sobrescrevendo.
+
+**Recuperando as anotações em tempo de execução** -- existe uma interface chamada `AnnotatedElement` que define os métodos para a recuperação das anotações. Todas as classes que representam os elementos que podem ser anotados, isto é, as classes `Class`, `Method`, `Field`, `Package` e `Constructor` implementam essa interface.
++ `isAnnotationPresent()` : pode ser utilizado para verificar se uma determinada anotação está presente ou não no elemento. Recebe como parâmetro a classe da anotação (`.class`) e retorna um `boolean` informando se a anotação existe ou não. 
++ `getAnnotation()` : recebe como parâmetro a classe da anotação (`.class`) e retorna a anotação desejada. A instância retornada possui o tipo da anotação, e seus atributos podem ser recuperados através dos métodos com seus nomes.
+
+Exemplo:
+```java
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyAnnotation {
+	String name();
+	int number();
+}
+
+@MyAnnotation(name="Learn Annotation", number=23)
+public class MyClass {
+
+	public static void main(String[] args) {
+		Class<MyClass> c = MyClass.class;
+
+		//verify if the annotation exists in the element
+		if(c.isAnnotationPresent(MyAnnotation.class)) {
+			MyAnnotation annotation = c.getAnnotation(MyAnnotation.class);
+			System.out.println("Name Propertie = " + annotation.name());
+			System.out.println("Number Propertie = " + annotation.number());
+		}
+	}
+}
+```
+
++ `getAnnotations()` : irá retornar uma lista com todas as anotações de um determinado elemento.
++ `getDelcaredAnnotations()` : irá retornar somente as anotações que foram diretamente declaradas no elemento, excluindo as que foram herdadas através do `@Inherited`. Como a questão de herançcas de anotações só se aplica a elementos do tipo `Class`, o retorno para os outros tipos de elementos será o mesmo para ambos os métodos.
+
+**Recuperando anotações de parâmetros** -- estas anotações são recuperadas de forma diferente simplesmente pelo fato da `API Reflection` não possuir uma classe que represente um parâmetro. 
++ `getParameterAnnotations()` : esse método está presente nos elementos `Method` e `Constructor` e retorna um array bidimensional de `Annotation`. A primeira dimensão representa os parâmetros daquele elemento e a segunda dimensão representa as anotações contidas naquele parâmetro.
+
+As anotações em parâmetro se tornam úteis quando há a necessidade de identificar qual informação precisa ser passada ele.
+
+Exemplo:
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Element(ElementType.PARAMETER)
+public @interface Param {
+	String value();
+}
+
+
+public static Object invokeMethod(Method m, Object obj, Map<String, Object> info) throws Exception {
+	Annotation[][] paramAnnot = m.getParametersAnnotations();
+	Object[] paramValues = new Object[paramAnnot.length];
+
+	for (int i=0; i < paramValues.length; i++) {
+		String name = getParameterName(paramAnnot[i]);
+		paramValues[i] = info.get(name);
+	}
+
+	return m.invoke(obj, paramValues);
+}
+
+
+public static String getParameterName(Annotation[] annotations) {
+	for (Annotation a : annotations) {
+		if (a instanceof Param) {
+			return ((Param)a).value();
+		}
+	}
+
+	throw new RuntimeException("@Param Annotation not found.");
+}
+
+
+public class TestParameterAnnotation {
+
+	public static void main(String[] args) throws Exception {
+		Map<String, Object> info = new HashMap<>();
+		info.put("int", 20);
+		info.put("text", "Hello, World");
+		info.put("String", "Hi, there");
+		info.put("number", 30);
+
+		TestParameterAnnotation testClass = new TestParameterAnnotation();
+		Method testMethod = test.getClass().getMethod("testMethod", Integer.class, String.class);
+		invokeMethod(testMethod, testClass, info);
+	}
+
+	public void testMethod(@Param("number") Integer i, @Param("text") String s) {
+		System.out.println("Number parameter = " + i);
+		System.out.println("Text parameter = " + s);
+	}
+}
+
+```

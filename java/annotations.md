@@ -197,5 +197,44 @@ public class TestParameterAnnotation {
 		System.out.println("Text parameter = " + s); // output -> Text parameter = Hello, World
 	}
 }
-
 ```
+
+**Lendo atributos de uma anotação via reflexão** -- É possível obter a classe relativa à anotação para descobrir seus atributos em tempo de compilação, isso sem a necessidade de conhecê-la previamente.
+Para obter a instância de `Class` que representa a anotação, usa-se o método `annotationType()`. Em seguida, os atributos da anotação podem ser recuperados através dos métodos que são utilizados para retorná-los.
+Para recuperar os métodos declarados na anotação, ou seja, os que definem atributos, é utilizado o método `getDeclaredMethods()`. 
+Exemplo: 
+```java
+public static void printAnnotations(AnotatedElement element) throws Exception {
+	Annotation[] annotations = element.getAnnotations();
+
+	for(Annotation a : annotation) {
+		Class<?> c = a.annotationType();
+	}
+
+	System.out.println("@" + c.getName());
+
+	for (Method method : c.getDeclaredMethods()) {
+		Object o = m.invoke(a);
+		System.out.println("|-> " + m.getName() + " = " o);
+	}
+}
+
+
+@MyAnnotation1(name="Annotation 1", number=23)
+@MyAnnotation2(String.class)
+public class PrintAnnotations {
+
+	public static void main(String[] args) throws Exception {
+		printAnnotations(PrintAnnotations.class);
+													/*
+													output :
+														@MyAnnotation1
+															|-> name = Annotation 1
+															|-> number = 23
+														@MyAnnotation2
+															|-> value = java.lang.String
+													*/
+	}
+}
+```
+

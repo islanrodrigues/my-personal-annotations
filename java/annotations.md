@@ -226,14 +226,14 @@ public class PrintAnnotations {
 
 	public static void main(String[] args) throws Exception {
 		printAnnotations(PrintAnnotations.class);
-													/*
-													output :
-														@MyAnnotation1
-															|-> name = Annotation 1
-															|-> number = 23
-														@MyAnnotation2
-															|-> value = java.lang.String
-													*/
+					/*
+					output :
+						@MyAnnotation1
+							|-> name = Annotation 1
+							|-> number = 23
+						@MyAnnotation2
+							|-> value = java.lang.String
+					*/
 	}
 }
 ```

@@ -92,7 +92,7 @@ public static void main(String[] args) {
             System.out.println("Any Text - using Interface with Anonymous class")
         }
         
-        text.printText(); output -> "Any Text - using Interface with Anonymous class"
+        text.printText(); // output -> "Any Text - using Interface with Anonymous class"
     }
 }
 ```

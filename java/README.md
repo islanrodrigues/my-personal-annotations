@@ -6,4 +6,5 @@
 + [Inheritance and Interface comparison](https://github.com/islanrodrigues/my-personal-annotations/blob/master/java/inheritance_and_interface_comparison.md)
 + [Error and Exception](https://github.com/islanrodrigues/my-personal-annotations/blob/master/java/error-and-exception.md)
 + [Annotations](https://github.com/islanrodrigues/my-personal-annotations/blob/master/java/annotations.md)
++ [Threads](https://github.com/islanrodrigues/my-personal-annotations/blob/master/java/threads.md)
 

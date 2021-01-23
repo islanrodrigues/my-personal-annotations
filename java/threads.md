@@ -95,5 +95,54 @@ public static void main(String[] args) {
 }
 ```
 
+**Método `isAlive`** -- o método tem como finalidade informar se a _Thread_ continua ativa ou não. O método retorna `true` caso o método `start` da _Thread_ tenha sido acionado e sua execução ainda não finalizada e retorna `false` caso contrário.
 
+Exemplo:
+```java
+public static void main(String[] args) { 
+    MyThread myThread01 = new MyThread("#1 Thread", 200);
+    MyThread myThread02 = new MyThread("#2 Thread", 400);
+    MyThread myThread03 = new MyThread("#3 Thread", 800);
+    
+    myThread01.start();
+    myThread02.start();
+    myThread03.start();
+    
+    while (myThread01.isAlive() || myThread02.isAlive() || myThread03.isAlive()) {
+       try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    System.out.println("Programa Finalizado");
+}
+```
+
+
+**Método `join`** -- o método tem como finalidade permitir que uma _Thread_ entre em um estado de espera, fazendo com que a próxima instrução do programa só seja executada após o encerramento da mesma. Em casos onde a _Thread_ for bloqueada ou tenha uma elevado tempo de resposta, esse comportamento pode ser problemático. Por conta disso, há sobrecargas no método `join`. São elas: `join(long millis)`; caso a execução da _Thread_ não seja encerrada dentro desse intervalo informado em `millis` (dado em millessegundos), o fluxo do programa é liberado e a próxima instrução é executada e `join(long millis, int nanos)`; onde é esperado `millis` (dado em milessegundos) + `nano` (dado em nanossegundos) para o fim da execução da _Thread_, caso contrário o fluxo do programa é liberado e a próxima instrução é executada.
+
+Exemplo:
+```java
+public static void main(String[] args) { 
+    MyThread myThread01 = new MyThread("#1 Thread", 500);
+    MyThread myThread02 = new MyThread("#2 Thread", 1000);
+    MyThread myThread03 = new MyThread("#3 Thread", 1500);
+    
+    myThread01.start();
+    myThread02.start();
+    myThread03.start();
+    
+    try {
+        myThread01.join();
+        myThread02.join();
+        myThread03.join();
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+    
+    System.out.println("Programa Finalizado");
+}
+```
 

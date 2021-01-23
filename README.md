@@ -11,5 +11,6 @@
 ---   
 
 **_`REFERENCES`_**
-+ [Canal Loiane Groner](https://www.youtube.com/channel/UCqQn92noBhY9VKQy4xCHPsg)
-+ [Livro: Componentes Reutilizáveis em Java com Reflexão e Anotações (Eduardo Guerra)](https://www.casadocodigo.com.br/products/livro-reflexao-anotacoes) 
++ [Loiane Groner Channel](https://www.youtube.com/channel/UCqQn92noBhY9VKQy4xCHPsg)
++ [Book: Componentes Reutilizáveis em Java com Reflexão e Anotações (Eduardo Guerra)](https://www.casadocodigo.com.br/products/livro-reflexao-anotacoes) 
++ [Baeldung](https://www.baeldung.com/)

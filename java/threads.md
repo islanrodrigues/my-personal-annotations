@@ -1,5 +1,5 @@
 ### Multitarefas: processos e _Threads_ 
-**Processo** -- é um programa que está sendo executado.
+**Processo** -- é um programa que está sendo executado.   
 **_Thread_** -- é a menor unidade de código que pode ser executada. 
 
 Ou seja, em um programa (_processo_) podem ser executadas uma ou mais tarefas (_Threads_) ao mesmo tempo.
@@ -91,14 +91,16 @@ public class MyThread implements Runnable {
 public static void main(String[] args) { 
     MyThread myThread01 = new MyThread("#1 Thread", 200);
     // Thread t1 = new Thread(myThread01) --> caso a estratégia de instanciar e executar a Thread no construtor não fosse usada
+
     MyThread myThread02 = new MyThread("#2 Thread", 400);
     // Thread t2 = new Thread(myThread02) --> caso a estratégia de instanciar e executar a Thread no construtor não fosse usada
+
     MyThread myThread03 = new MyThread("#3 Thread", 800);
     // Thread t3 = new Thread(myThread03) --> caso a estratégia de instanciar e executar a Thread no construtor não fosse usada
 }
 ```
 
-**Método `isAlive`** -- o método tem como finalidade informar se a _Thread_ continua ativa ou não. O método retorna `true` caso o método `start` da _Thread_ tenha sido acionado e sua execução ainda não finalizada e retorna `false` caso contrário.
+**Método `isAlive`** -- o método tem como finalidade informar se a _Thread_ continua ativa ou não. Retorna `true` caso o método `start` da _Thread_ tenha sido acionado e sua execução ainda não finalizada ou `false` caso contrário.
 
 Exemplo:
 ```java
@@ -124,7 +126,7 @@ public static void main(String[] args) {
 ```
 
 
-**Método `join`** -- o método tem como finalidade permitir que uma _Thread_ entre em um estado de espera, fazendo com que a próxima instrução do processo só seja executada após o encerramento da mesma. Em casos onde a _Thread_ for bloqueada ou tenha uma elevado tempo de resposta, esse comportamento pode ser problemático. Por conta disso, existem sobrecargas no método `join`. São elas: `join(long millis)`; caso a execução da _Thread_ não seja encerrada dentro desse intervalo informado em `millis` (dado em millessegundos), o fluxo do processo é liberado e a próxima instrução é executada e `join(long millis, int nanos)`; onde é esperado `millis` (dado em milessegundos) + `nano` (dado em nanossegundos) para o fim da execução da _Thread_, caso contrário o fluxo do processo é liberado e a próxima instrução é executada.
+**Método `join`** -- o método tem como finalidade permitir que uma _Thread_ entre em um estado de espera, fazendo com que a próxima instrução do processo só seja executada após o encerramento da mesma. Em casos onde a _Thread_ for bloqueada ou tenha um elevado tempo de resposta, esse comportamento pode ser problemático. Por conta disso, existem sobrecargas no método `join`. São elas: `join(long millis)`; caso a execução da _Thread_ não seja encerrada dentro desse intervalo informado em `millis` (dado em millessegundos), o fluxo do processo é liberado e a próxima instrução é executada e `join(long millis, int nanos)`; onde é esperado `millis` (dado em milessegundos) + `nano` (dado em nanossegundos) para o fim da execução da _Thread_, caso contrário o fluxo do processo é liberado e a próxima instrução é executada.
 
 Exemplo:
 ```java
@@ -172,4 +174,134 @@ Exemplo:
     myThread03.setPriority(Thread.MIN_PRIORITY);
     
 ```
+
+**Métodos e blocos sincronizados** -- é o ato de coordenar as atividades de duas ou mais _Threads_. Quando duas ou mais _Threads_ precisam um recurso compartilhado, isso garante que somente uma _Thread_ pode acessar o recurso por vez. É usado a palavra `synchronized` em assinaturas de métodos ou em blocos de código.
+
+Exemplo:
+```java
+public Calculator {
+    private int sum;
+
+    public synchronized sumArray(int[] array) {
+        sum = 0;
+
+        for(inti = 0; i < array.length; i++) {
+            sum += array[i];
+        }   
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**Métodos `notify`, `wait` e `notifyAll`** -- são métodos que permitem um revezamento de um determinado recurso entre _Threads_. Isso impede que um determinado recurso fique bloqueado por muito tempo sendo passível da ocorrência de um _deadlock_. A utilização destes métodos deve ser dentro de um bloco de código sincronizado (`synchronized`).
++ **`wait`** : bloqueia a execução da _Thread_ temporariamente, colocando-a em um estado de espera. A _Thread_ fica em modo de espera até que seja notificada;
++ **`notify`** : notifica uma _Thread_ que estava esperando para resumir a sua execução, ou seja, retornar a sua execução;
++ **`notifyAll`** : caso exista mais de uma _Thread_ a ser notificada, onde a que possuir prioridade mais alta terá acesso ao recurso.
+
+Exemplo:
+```java
+//Simple Class
+public class TicTac {
+	boolean tic;
+
+	synchronized void tic(boolean isExecute) {
+		if (!isExecute) {
+			tic = true;
+			notify();
+			return;
+		}
+
+		System.out.print("Tic ");
+		tic = true;
+		notify();
+
+		try {
+			while (tic) {
+				wait();
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	synchronized void tac(boolean isExecute) {
+		if (!isExecute) {
+			tic = false;
+			notify();
+			return;
+		}
+
+		System.out.println("Tac");
+		tic = false;
+		notify();
+
+		try {
+			while (!tic) {
+				wait();
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+
+// Thread
+public class ThreadTicTac implements Runnable {
+
+	TicTac tictac;
+	Thread t;
+	
+	final int NUM = 5;
+	
+	public ThreadTicTac(String name, TicTac tt) {
+		this.tictac = tt;
+		t = new Thread(this, name);
+		t.start();
+	}
+
+	@Override
+	public void run() {
+		if (t.getName().equalsIgnoreCase("Tic")) {
+			for (int i=0; i<NUM; i++) {
+				tictac.tic(true);
+			}
+
+			tictac.tic(false);
+
+		} else {
+			for (int i=0; i<NUM; i++) {
+				tictac.tac(true);
+			}
+
+			tictac.tac(false);
+		}		
+	}
+}
+
+
+// Main method
+public static void main(String[] args) {
+		
+    TicTac tictac = new TicTac();
+    ThreadTicTac tic = new ThreadTicTac("Tic", tictac);
+    ThreadTicTac tac = new ThreadTicTac("Tac", tictac);
+    
+    try {
+        tic.t.join();
+        tac.t.join();
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+
+
+
 

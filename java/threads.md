@@ -301,6 +301,98 @@ public static void main(String[] args) {
 }
 ```
 
+**Métodos `resume`, `suspend` e `stop`** -- são métodos que existiam até o Java 2. O método `suspend` foi removido pelo fato de poder causar _dedlocks_. O método `resume`, como depende do método anterior, também foi removido. E por fim, o método `stop` foi substituído pelo método `interrupt` (por este motivo que existe a `InterruptedException`). Mesmo não existindo mais na classe `Thread`, é possível implementar estes métodos de uma forma segura.
++ **`suspend`** : suspende (pausa) temporariamente a execução da _Thread_;
++ **`resume`** : resume (despausa) a execução da _Thread_;
++ **`stop`** : termina a execução da _Thread_.
+
+Exemplo: 
+```java
+public class MyThread implements Runnable {
+
+	private String name;
+	private boolean isSuspend;
+	private boolean wasTerminated;
+
+	public MyThread(String name){
+		this.name = name;
+		this.isSuspend = false;
+		new Thread(this, name).start();
+	}
+
+	@Override
+	public void run() {
+		System.out.println("Run " + this.name);
+
+		try {
+			for (int i=0; i<10; i++) {
+				System.out.println("Thread " + name + ", " + i);
+				Thread.sleep(300);
+
+				synchronized (this) {
+					while (isSuspend){
+						wait();
+					}
+					if (this.wasTerminated){
+						break;
+					}
+				}
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Thread " + this.name + " terminated.");
+	}
+	
+	void suspend() {
+		this.isSuspend = true;
+	}
+
+	synchronized void resume() {
+		this.isSuspend = false;
+		notify();
+	}
+	
+	synchronized void stop() {
+		this.wasTeminated = true;
+		notify();
+	}
+}
+
+
+public static void main(String[] args) {
+    MinhaThread t1 = new MinhaThread("#1");
+    MinhaThread t2 = new MinhaThread("#2");
+    
+    System.out.println("Suspend Thread #1");
+    t1.suspend();
+    
+    try {
+        Thread.sleep(200);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+    
+    System.out.println("suspend Thread #2");
+    t2.suspend();
+    
+    System.out.println("Resume Thread #1");
+    t1.resume();
+    
+    try {
+        Thread.sleep(200);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+    
+    System.out.println("Resume Thread #2");
+    t2.resume();
+    
+    System.out.println("Stop Thread #2");
+    t2.stop();
+}
+```
 
 
 

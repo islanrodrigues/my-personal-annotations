@@ -11,7 +11,7 @@ Ou seja, em um programa (_processo_) podem ser executadas uma ou mais tarefas (_
 + **`WAITING`** : em estado de espera;
 + **`DEAD`** : _Thread_ terminada.
 
-![life cycle illustration](https://github.com/islanrodrigues/my-personal-annotations/blob/master/images/life-cycle-thread.png)
+![life cycle illustration](https://github.com/islanrodrigues/my-personal-annotations/blob/master/images/java/life-cycle-thread.png)
 
 **Métodos importantes** -- basicamente são os métodos mais importantes dentro do ciclo de vida de uma _Thread_.
 + **`start`** : inicia a _Thread_, deixando pronta para ser executada (o método `run` é chamado);

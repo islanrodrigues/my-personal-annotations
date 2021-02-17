@@ -5,7 +5,11 @@
  
 
 + **_`FRONT END`_**
-  * [Annotations about Gatsby](https://github.com/islanrodrigues/my-personal-annotations/tree/master/gatsby)   
+  * [Annotations about Gatsby](https://github.com/islanrodrigues/my-personal-annotations/tree/master/gatsby)
+
+
++ **_`DEVOPS TECNOLOGIES`_**
+  * [Annotations about Docker](https://github.com/islanrodrigues/my-personal-annotations/tree/master/docker)    
    
    
 ---   
@@ -14,3 +18,4 @@
 + [Loiane Groner Channel](https://www.youtube.com/channel/UCqQn92noBhY9VKQy4xCHPsg)
 + [Book: Componentes Reutilizáveis em Java com Reflexão e Anotações (Eduardo Guerra)](https://www.casadocodigo.com.br/products/livro-reflexao-anotacoes) 
 + [Baeldung](https://www.baeldung.com/)
++ [Course: Docker Ferramenta essencial para Desenvolvedores (Leonardo Leitão)](https://www.udemy.com/course/curso-docker/)

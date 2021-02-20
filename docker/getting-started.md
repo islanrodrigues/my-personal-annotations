@@ -41,6 +41,8 @@ For more examples and ideas, visit:
 + **`docker container start`** : é o passo de inicialização do container;
 + **`docker container exec`** : é o passo de execução do container em modo interativo.
 
+O método `run` cria sempre um novo container no momento em que é executado.
+
 **Modos de execução de containers** -- existem dois modos básicos no Docker que podem ser usados para a execução de containers.
 + **modo daemon** : é o modo no qual um container é executado e fica rodando como um processo em _background_;
 + **modo interativo** : é o modo que serve para entrar no container e realizar algum tipo de experimento, verificação, teste ou se um determinado ajuste de configuração surtiu o efeito desejado.

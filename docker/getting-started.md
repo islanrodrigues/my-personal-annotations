@@ -47,6 +47,32 @@ O método `run` cria sempre um novo container no momento em que é executado.
 + **modo daemon** : é o modo no qual um container é executado e fica rodando como um processo em _background_;
 + **modo interativo** : é o modo que serve para entrar no container e realizar algum tipo de experimento, verificação, teste ou se um determinado ajuste de configuração surtiu o efeito desejado.
 
-**Comandos interessantes de se conhecer** -- o Docker baseia fortemente a sintaxe de seus comandos na sintaxe do _bash_ de sistemas baseados em Unix.
-+ **`docker container ps`** : verifica e exibe quais containers estão sendo executados no momento;
-+ **`docker container ps -a`** : verifica e exibe todos os containers que foram executados independente do _status_.
+**Nomeando containers** -- para nomear um container é usado a _flag_ `--name`. Essa funcionalidade torna possível a reutilização de containers criados, uma vez que o comando `run` sempre cria um novo container.
+
+Exemplo: 
+```bash
+docker container run --name myDebian debian
+```
+
+Containers devem possuir nomes únicos. Caso tente criar um novo container com um nome já existente, o Docker irá impedir a ação e informar o erro.
+
+**Reutilizando containers** -- é altamente recomendado que seja utilizado nomes relevantes para nomeação dos containers. Para que se possa reutilizar um container previamente criado basta invocar o comando `start`.
+
+Exemplo:
+Digamos que o nome de um container criado seja **myFirstContainer**. 
+```bash
+docker container start myFirstContainer
+```
+
+**Mapeando portas de um container** -- para mapeamento de portas de um container é usado a _flag_ `-p`. Como parâmetro para a _flag_ é passado duas portas que devem ser separadas por `:`. A porta informada antes dos dois-pontos será a porta externa ao container, ou seja, a porta pela qual iremos acessar o serviço. A porta informanda depois dos dois-pontos será a porta interna do container, onde de fato será feito o _start_ do serviço.
+
+Exemplo: 
+```bash
+docker container run -p 8080:80 nginx
+```
+
+**Outros comandos interessantes de se conhecer** -- o Docker baseia fortemente a sintaxe de seus comandos na sintaxe do _bash_ de sistemas baseados em Unix.
++ **`docker container run --help`** : traz uma lista de todas as possíveis opções de _flags_ que podem ser utilizadas;
++ **`docker container ls` ou `docker container ps`**: verifica e exibe quais containers estão sendo executados no momento;
++ **`docker container ls -a` ou `docker container ps -a`** : verifica e exibe todos os containers que foram executados independente do _status_;
++ **`docker container -i -t` ou `docker container -it`** : a _flag_ `i` informa que o container será executado no modo interativo e a _flag_ `t` informa que o usuário terá acesso ao terminal.

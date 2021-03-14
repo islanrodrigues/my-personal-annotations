@@ -2,7 +2,7 @@
 Após a instalação do Docker seguindo as orientações do site oficial, o comando `docker` deve ser reconhecido via terminal. Para verificar se o Docker está sendo executado de maneira correta, é possível fazer o simples teste do **hello-world** através do comando `docker container run hello-world`.
 
 Exemplo: 
-```bash
+```text
 Unable to find image 'hello-world:latest' locally
 latest: Pulling from library/hello-world
 0e03bdcc26d7: Pull complete

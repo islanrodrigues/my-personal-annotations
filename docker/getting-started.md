@@ -64,11 +64,52 @@ Digamos que o nome de um container criado seja **myFirstContainer**.
 docker container start myFirstContainer
 ```
 
-**Mapeando portas de um container** -- para mapeamento de portas de um container é usado a _flag_ `-p`. Como parâmetro para a _flag_ é passado duas portas que devem ser separadas por `:`. A porta informada antes dos dois-pontos será a porta externa ao container, ou seja, a porta pela qual iremos acessar o serviço. A porta informanda depois dos dois-pontos será a porta interna do container, onde de fato será feito o _start_ do serviço.
+Caso haja a necessidade de reiniciar a execução do container, basta invocar o comando `restart`.
+
+Exemplo:
+```bash
+docker container restart myFirstContainer
+```
+
+**Mapeando portas de um container** -- para mapeamento de portas de um container é usado a _flag_ `-p`. Como parâmetro para a _flag_ é passado duas portas que devem ser separadas por `:`. A porta informada antes dos dois-pontos será a porta externa ao container, ou seja, a porta pela qual iremos acessar o serviço. A porta informada depois dos dois-pontos será a porta interna do container, onde de fato será feito o _start_ do serviço.
 
 Exemplo: 
 ```bash
 docker container run -p 8080:80 nginx
+```
+
+**Mapeando diretórios para um container** -- para mapeamento de diretórios externos para dentro de um container é usado a _flag_ `-v`. Como parâmetro para a _flag_ é passado dois caminhos absolutos que devem ser separados por `:`. O caminho informado antes dos dois-pontos será o caminho absoluto do diretório da máquina _host_ o qual deseja mapear para dentro do container. O caminho informado depois dos dois-pontos será justamente o caminho absoluto do diretório do container que irá enxergar esse mapeamento.
+
+Exemplo:
+```bash
+docker container run -p 8080:80 -v $(pwd)/meu_volume/html:/usr/share/nginx/html nginx
+```
+
+**Rodando e gerenciando um container em _background_** -- para executar um container no modo _daemon_ é usado a _flag_ `-d`. Após execução do container, é possível verificar o seu funcionamento em _background_ através da _flag_ `ps` (vide seção *__"Outros comandos interessantes de se conhecer"__*).
+
+Exemplo:
+```bash
+docker container run -d --name my-nginx -p 8080:80 -v $(pwd)/meu_volume/html:/usr/share/nginx/html nginx
+```
+Para parar a execução em modo _daemon_ basta utilizar a _flag_ `stop` seguido do nome ou do ID do container. Por isso é essencial que os containers sejam nomeados de forma relevante, não deixando isso a cargo do Docker.
+
+Exemplo:
+```bash
+docker container stop my-nginx
+```
+
+Para ter acesso a lista de _logs_ gerados por um determinado container, basta utilizar a _flag_ `logs` seguido do nome do container.
+
+Exemplo:
+```bash
+docker container logs my-nginx
+```
+
+Para examinar informações inerentes a um determinado container, basta utilizar a _flag_ `inspect`. Através desse comando é possível trazer, em formato JSON, diversas características do container como tipo de imagem, diretório de log, informações sobre rede etc.
+
+Exemplo:
+```bash
+docker container inspect my-nginx
 ```
 
 **Outros comandos interessantes de se conhecer** -- o Docker baseia fortemente a sintaxe de seus comandos na sintaxe do _bash_ de sistemas baseados em Unix.

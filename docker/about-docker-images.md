@@ -40,17 +40,61 @@ docker image rm debian nova-imagem-debian
 
 **Criando uma imagem** -- para se construir imagens no Docker é preciso criar um arquivo descritor, chamado de `Dockerfile`. É a partir desse descritor que o Docker conseguirá interpretar e construir uma determinada imagem. 
 
-Exemplo de `Dockerfile`:
+Alguns Exemplos de `Dockerfile`:
 ```text
 FROM nginx:latest
 RUN echo '<h1>Hello World with Docker!</h1>' > /usr/share/nginx/html/index.html
 ```
 
+```text
+FROM debian
+LABEL maintainer 'Islan Rodrigues'
+
+ARG S3_BUCKET=files
+ENV S3_BUCKET=${S3_BUCKET}
+```
+
+```text
+FROM python:3.7
+LABEL maintainer 'Islan Rodrigues'
+
+RUN useradd www && \
+    mkdir /app && \
+    mkdir /log && \
+    chown www /log
+
+USER www
+VOLUME /log
+WORKDIR /app
+EXPOSE 8000
+
+ENTRYPOINT ["/usr/local/bin/python"]
+CMD ["run.py"]
+```
+
 Após criação do `Dockerfile`, o _build_ pode ser realizado com o comando `image build`, acompanhado de possíveis opções de construção (vide documentação oficial) e o caminho relativo onde o `Dockerfile` se encontra.
 
-Exemplo:
+Exemplos:
 ```bash
-docker image build -t minha-primeira-imagem:latest ./docker/
+docker image build -t imagem-nginx:latest ./docker/
+```
+
+```bash
+docker image build --build_arg S3_BUCKET=myApp -t imagem-debian ./docker/
 ```
 
 Através do comando `image ls` vai ser possível enxergar a nova imagem criada sendo listada.
+
+**Enviando imagens para o Docker Hub** -- para que seja possível o envio de imagens para o servidor do Docker Hub, é necessário criar uma conta de registro na plataforma. Após o cadastro, é possível realizar o _login_ na conta através do comando `login`, informando qual o _username_. Em sequência a este processo, a respectiva senha será solicitada.
+
+Exemplo:
+```bash
+docker login --username=userdocker
+```
+
+Para que seja possível subir a imagem desejada, deve-se nomeá-la da seguinte maneira: `<seu_usuario>/<nome_da_imagem>:<tag>`. Por fim, basta utilizar o comando `image push` informando o nome da imagem.
+
+Exemplo:
+```bash
+docker image push userdocker/myfirstimage:1.0
+```

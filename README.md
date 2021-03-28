@@ -23,3 +23,4 @@
 + [Otávio Miranda Channel](https://www.youtube.com/user/todoespacoonline)
 + [TreinaWeb's Blog](https://www.treinaweb.com.br/blog/)
 + [Official Python Documentation](https://www.python.org/doc/)
++ [Official Docker Documentation](https://docs.docker.com/)

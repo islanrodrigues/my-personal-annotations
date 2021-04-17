@@ -1,4 +1,4 @@
-## Imagens em Docker
+### Imagens em Docker
 Todas as imagens - igualmente como os containers - possuem um identificador único, que são hashes humanamente difícies de serem decoradas. Por esse motivo, é muito comum as imagens possuírem tags para facilitar a identificação.
 
 **_Tags_ nas imagens** -- as _tags_ funcionam como uma espécie de ponteiro, apontando para uma determinada imagem (_IMAGE ID_). É possível existir várias _tags_ apontando para uma mesma imagem. 
